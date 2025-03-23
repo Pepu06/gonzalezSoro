@@ -88,7 +88,6 @@ const departmentSelectionFlow = addKeyword<Provider, Database>(['Seleccionar', '
                 const selectedNumber = parseInt(selection.replace('Seleccionar: ', '')) - 1;
                 console.log('Selected number:', selectedNumber);
                 const department = potentialMatches[selectedNumber];
-                console
 
                 if (department) {
                     // Create new message directly in the selected department
@@ -104,17 +103,25 @@ const departmentSelectionFlow = addKeyword<Provider, Database>(['Seleccionar', '
                     );
 
                     const deptAddress = department.address.toLowerCase(); // san benito de palermo 1584
+                    console.log('deptAddress:', deptAddress); // san benito de palermo 1584
                     const messageWords = message.text.toLowerCase().split(/\s+/) // en san benito hay luz
-                    const deptoEnMje = messageWords.reduce((longest, word) => {
-                        if (deptAddress.includes(word) && word.length > longest.length) {
-                            return word;
+                    messageWords.forEach((word, index) => {
+                        messageWords[index] = `${word} `;
+                    });
+                    console.log(messageWords)
+                    let deptoEnMje = ''
+                    for (const word of messageWords) {
+                        console.log(word)
+                        if (deptAddress.includes(word)) {
+                            deptoEnMje = deptoEnMje + word;
+                            console.log('deptoEnMje:', deptoEnMje); // san benito
                         }
-                        return longest;
-                    }, ''); // san benito
+                    }
 
                     console.log('deptoEnMje:', deptoEnMje); // san benito
 
                     const messageText = message.text.replace(`en ${deptoEnMje}`, '').trim() // hay luz
+                    console.log('messageText:', messageText); // hay luz
                     // Send a detailed confirmation message
                     await ctxFn.flowDynamic([
                         {

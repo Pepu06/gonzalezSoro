@@ -146,12 +146,13 @@ const newDepartmentFlow = addKeyword<Provider, Database>(['Nuevo', 'departamento
                 { $push: { messages: message._id } }
             );
 
+            const messageText = message.text.replace(`en ${department.address}`, '').trim()
             // Send a detailed confirmation message
             await ctxFn.flowDynamic([
                 {
                     body: 'Información guardada exitosamente:\n\n' +
                         `📍 Departamento: ${department.address}\n` +
-                        `💬 Mensaje: ${message.text}`
+                        `💬 Mensaje: ${messageText}`
                 }
             ]);
         } catch (error) {

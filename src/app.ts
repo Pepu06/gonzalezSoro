@@ -146,7 +146,11 @@ const newDepartmentFlow = addKeyword<Provider, Database>(['Nuevo', 'departamento
                 { $push: { messages: message._id } }
             );
 
-            const messageText = message.text.replace(`en ${department.address}`, '').trim()
+            const deptAddress = department.address.toLowerCase();
+            const messageWords = mensajePrincipal.toLowerCase().split(/\s+/)
+            const deptoEnMje = messageWords.some(word => deptAddress.includes(word));
+
+            const messageText = message.text.replace(`en ${deptoEnMje}`, '').trim()
             // Send a detailed confirmation message
             await ctxFn.flowDynamic([
                 {

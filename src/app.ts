@@ -160,17 +160,19 @@ const newDepartmentFlow = addKeyword<Provider, Database>(['Nuevo', 'departamento
             );
 
             const deptAddress = department.address.toLowerCase(); // san benito de palermo 1584
+            console.log('deptAddress:', deptAddress); // san benito de palermo 1584
             const messageWords = message.text.toLowerCase().split(/\s+/) // en san benito hay luz
+            console.log('messageWords:', messageWords); // [en, san, benito, hay, luz]
             const deptoEnMje = messageWords.reduce((longest, word) => {
                 if (deptAddress.includes(word) && word.length > longest.length) {
                     return word;
                 }
                 return longest;
             }, ''); // san benito
-
             console.log('deptoEnMje:', deptoEnMje); // san benito
 
             const messageText = message.text.replace(`en ${deptoEnMje}`, '').trim() // hay luz
+            console.log('messageText:', messageText); // hay luz
             // Send a detailed confirmation message
             await ctxFn.flowDynamic([
                 {

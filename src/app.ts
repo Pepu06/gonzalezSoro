@@ -90,38 +90,35 @@ const departmentSelectionFlow = addKeyword<Provider, Database>(['Seleccionar', '
                 const department = potentialMatches[selectedNumber];
 
                 if (department) {
-                    // Create new message directly in the selected department
+                    // Process the message to remove department reference
+                    const deptAddress = department.address.toLowerCase();
+                    const messageWords = mensajePrincipal.toLowerCase().split(/\s+/);
+                    messageWords.forEach((word, index) => {
+                        messageWords[index] = `${word} `;
+                    });
+                    
+                    let deptoEnMje = '';
+                    for (const word of messageWords) {
+                        if (deptAddress.includes(word)) {
+                            deptoEnMje = deptoEnMje + word;
+                        }
+                    }
+                    
+                    const messageText = mensajePrincipal.replace(`en ${deptoEnMje}`, '').trim();
+                    console.log('messageText to save:', messageText);
+                    
+                    // Create new message with the processed text
                     const message = await Message.create({
-                        text: mensajePrincipal, // Use the stored original message
+                        text: messageText, // Use the processed message without department reference
                         department: department._id
                     });
+                    console.log('Saved messageText to database:', messageText);
 
                     // Update department with the new message
                     await Department.findByIdAndUpdate(
                         department._id,
                         { $push: { messages: message._id } }
                     );
-
-                    const deptAddress = department.address.toLowerCase(); // san benito de palermo 1584
-                    console.log('deptAddress:', deptAddress); // san benito de palermo 1584
-                    const messageWords = message.text.toLowerCase().split(/\s+/) // en san benito hay luz
-                    messageWords.forEach((word, index) => {
-                        messageWords[index] = `${word} `;
-                    });
-                    console.log(messageWords)
-                    let deptoEnMje = ''
-                    for (const word of messageWords) {
-                        console.log(word)
-                        if (deptAddress.includes(word)) {
-                            deptoEnMje = deptoEnMje + word;
-                            console.log('deptoEnMje:', deptoEnMje); // san benito
-                        }
-                    }
-
-                    console.log('deptoEnMje:', deptoEnMje); // san benito
-
-                    const messageText = message.text.replace(`en ${deptoEnMje}`, '').trim() // hay luz
-                    console.log('messageText:', messageText); // hay luz
                     // Send a detailed confirmation message
                     await ctxFn.flowDynamic([
                         {
@@ -154,32 +151,33 @@ const newDepartmentFlow = addKeyword<Provider, Database>(['Nuevo', 'departamento
                 { upsert: true, new: true }
             );
 
-            // Create new message with the original message text
+            // Process the message to remove department reference
+            const deptAddress = department.address.toLowerCase();
+            const messageWords = mensajePrincipal.toLowerCase().split(/\s+/);
+            const deptoEnMje = messageWords.reduce((longest, word) => {
+                if (deptAddress.includes(word) && word.length > longest.length) {
+                    return word;
+                }
+                return longest;
+            }, '');
+            
+            const messageText = mensajePrincipal.replace(`en ${deptoEnMje}`, '').trim();
+            
+            // Create new message with the processed text
             const message = await Message.create({
-                text: mensajePrincipal, // This ensures text field is always populated
+                text: messageText, // Use the processed message without department reference
                 department: department._id
             });
+            console.log('Saved messageText to database:', messageText);
 
             // Update department with the new message
             await Department.findByIdAndUpdate(
                 department._id,
                 { $push: { messages: message._id } }
             );
-
-            const deptAddress = department.address.toLowerCase(); // san benito de palermo 1584
-            console.log('deptAddress:', deptAddress); // san benito de palermo 1584
-            const messageWords = message.text.toLowerCase().split(/\s+/) // en san benito hay luz
-            console.log('messageWords:', messageWords); // [en, san, benito, hay, luz]
-            const deptoEnMje = messageWords.reduce((longest, word) => {
-                if (deptAddress.includes(word) && word.length > longest.length) {
-                    return word;
-                }
-                return longest;
-            }, ''); // san benito
-            console.log('deptoEnMje:', deptoEnMje); // san benito
-
-            const messageText = message.text.replace(`en ${deptoEnMje}`, '').trim() // hay luz
-            console.log('messageText:', messageText); // hay luz
+            
+            console.log('deptAddress:', deptAddress);
+            console.log('messageText:', messageText);
             // Send a detailed confirmation message
             await ctxFn.flowDynamic([
                 {

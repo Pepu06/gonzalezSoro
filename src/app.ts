@@ -96,17 +96,17 @@ const departmentSelectionFlow = addKeyword<Provider, Database>(['Seleccionar', '
                     messageWords.forEach((word, index) => {
                         messageWords[index] = `${word} `;
                     });
-                    
+
                     let deptoEnMje = '';
                     for (const word of messageWords) {
                         if (deptAddress.includes(word)) {
                             deptoEnMje = deptoEnMje + word;
                         }
                     }
-                    
+
                     const messageText = mensajePrincipal.replace(`en ${deptoEnMje}`, '').trim();
                     console.log('messageText to save:', messageText);
-                    
+
                     // Create new message with the processed text
                     const message = await Message.create({
                         text: messageText, // Use the processed message without department reference
@@ -160,8 +160,13 @@ const newDepartmentFlow = addKeyword<Provider, Database>(['Nuevo', 'departamento
                 }
                 return longest;
             }, '');
-            
-            const messageText = mensajePrincipal.replace(`agregar en ${deptoEnMje}`, '').replace(`en ${deptoEnMje}`, '').trim();
+            let messageText = '';
+            if (mensajePrincipal.includes('agregar en')) {
+                messageText = mensajePrincipal.replace(`agregar en ${deptoEnMje}`, '').trim();
+            }
+            else {
+                messageText = mensajePrincipal.replace(`en ${deptoEnMje}`, '').trim();
+            }
             // Create new message with the processed text
             const message = await Message.create({
                 text: messageText, // Use the processed message without department reference
@@ -174,7 +179,7 @@ const newDepartmentFlow = addKeyword<Provider, Database>(['Nuevo', 'departamento
                 department._id,
                 { $push: { messages: message._id } }
             );
-            
+
             console.log('deptAddress:', deptAddress);
             console.log('messageText:', messageText);
             // Send a detailed confirmation message

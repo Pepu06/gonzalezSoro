@@ -161,7 +161,7 @@ const newDepartmentFlow = addKeyword<Provider, Database>(['Nuevo', 'departamento
                 return longest;
             }, '');
             
-            const messageText = mensajePrincipal.replace(`en ${deptoEnMje}`, '').replace(`agregar en ${deptoEnMje}`, '').trim();
+            const messageText = mensajePrincipal.replace(`agregar en ${deptoEnMje}`, '').replace(`en ${deptoEnMje}`, '').trim();
             // Create new message with the processed text
             const message = await Message.create({
                 text: messageText, // Use the processed message without department reference

@@ -107,10 +107,8 @@ const departmentSelectionFlow = addKeyword<Provider, Database>(['Seleccionar', '
                     let messageText = '';
 
                     if (mensajePrincipal.includes('agregar en')) {
-                        messageText = mensajePrincipal.replace(`agregar en ${deptoEnMje}`, '').trim();
-                    }
-                    else {
                         messageText = mensajePrincipal.replace(`en ${deptoEnMje}`, '').trim();
+                        messageText = mensajePrincipal.replace(`agregar`, '').trim();
                     }
                     
                     console.log('messageText to save:', messageText);
@@ -170,11 +168,10 @@ const newDepartmentFlow = addKeyword<Provider, Database>(['Nuevo', 'departamento
             }, '');
             let messageText = '';
             if (mensajePrincipal.includes('agregar en')) {
-                messageText = mensajePrincipal.replace(`agregar en ${deptoEnMje}`, '').trim();
-            }
-            else {
                 messageText = mensajePrincipal.replace(`en ${deptoEnMje}`, '').trim();
+                messageText = mensajePrincipal.replace(`agregar`, '').trim();
             }
+
             // Create new message with the processed text
             const message = await Message.create({
                 text: messageText, // Use the processed message without department reference

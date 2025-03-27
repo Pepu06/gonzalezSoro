@@ -24,7 +24,7 @@ const textFlow = addKeyword<Provider, Database>(['en ', ' departamento '])
     .addAction(async (ctx, ctxFn) => {
         try {
             const userMessage = ctx.body;
-            mensajePrincipal = userMessage; // Store the original message
+            mensajePrincipal = userMessage.toLocaleLowerCase(); // Store the original message
 
             // First, get all existing departments
             const allDepartments = await Department.find({});
@@ -104,7 +104,15 @@ const departmentSelectionFlow = addKeyword<Provider, Database>(['Seleccionar', '
                         }
                     }
 
-                    const messageText = mensajePrincipal.replace(`en ${deptoEnMje}`, '').trim();
+                    let messageText = '';
+
+                    if (mensajePrincipal.includes('agregar en')) {
+                        messageText = mensajePrincipal.replace(`agregar en ${deptoEnMje}`, '').trim();
+                    }
+                    else {
+                        messageText = mensajePrincipal.replace(`en ${deptoEnMje}`, '').trim();
+                    }
+                    
                     console.log('messageText to save:', messageText);
 
                     // Create new message with the processed text

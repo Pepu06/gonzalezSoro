@@ -169,7 +169,7 @@ const newDepartmentFlow = addKeyword<Provider, Database>(['Nuevo', 'departamento
             let messageText = '';
             if (mensajePrincipal.includes('agregar en')) {
                 messageText = mensajePrincipal.replace(`en ${deptoEnMje}`, '').trim();
-                 
+                messageText = messageText.replace(`agregar `, '').trim();
             }
 
             // Create new message with the processed text

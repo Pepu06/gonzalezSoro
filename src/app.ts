@@ -108,7 +108,7 @@ const departmentSelectionFlow = addKeyword<Provider, Database>(['Seleccionar', '
 
                     if (mensajePrincipal.includes('agregar en')) {
                         messageText = mensajePrincipal.replace(`en ${deptoEnMje}`, '').trim();
-                        messageText = messageText.replace(`agregar`, '').trim();
+                        messageText = messageText.replace(`agregar `, '').trim();
                     }
                     
                     console.log('messageText to save:', messageText);
@@ -169,7 +169,7 @@ const newDepartmentFlow = addKeyword<Provider, Database>(['Nuevo', 'departamento
             let messageText = '';
             if (mensajePrincipal.includes('agregar en')) {
                 messageText = mensajePrincipal.replace(`en ${deptoEnMje}`, '').trim();
-                messageText = messageText.replace(`agregar`, '').trim();
+                 
             }
 
             // Create new message with the processed text

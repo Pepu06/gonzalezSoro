@@ -118,13 +118,14 @@ const departmentSelectionFlow = addKeyword<Provider, Database>(['Seleccionar', '
                         text: messageText, // Use the processed message without department reference
                         department: department._id
                     });
-                    console.log('Saved messageText to database:', messageText);
+                    console.log('Saved messageTextß to database:', messageText);
 
                     // Update department with the new message
                     await Department.findByIdAndUpdate(
                         department._id,
                         { $push: { messages: message._id } }
                     );
+                    //323
                     // Send a detailed confirmation message
                     await ctxFn.flowDynamic([
                         {

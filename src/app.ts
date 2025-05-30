@@ -20,7 +20,7 @@ mongoose.connect(process.env.MONGO_DB_URI)
         process.exit(1)
     })
 
-const textFlow = addKeyword<Provider, Database>(['en ', ' departamento '])
+const textFlow = addKeyword<Provider, Database>(['en ', ' departamento ', 'En '])
     .addAction(async (ctx, ctxFn) => {
         try {
             const userMessage = ctx.body;
@@ -121,7 +121,7 @@ const departmentSelectionFlow = addKeyword<Provider, Database>(['Seleccionar', '
                         text: messageText, // Use the processed message without department reference
                         department: department._id
                     });
-                    console.log('Saved messageTextß to database:', messageText);
+                    console.log('Saved messageText to database:', messageText);
 
                     // Update department with the new message
                     await Department.findByIdAndUpdate(
@@ -133,8 +133,8 @@ const departmentSelectionFlow = addKeyword<Provider, Database>(['Seleccionar', '
                     await ctxFn.flowDynamic([
                         {
                             body: 'Información guardada exitosamente:\n\n' +
-                                `📍 Departamento: ${department.address}\n` + // san benito de palermo 1584
-                                `💬 Mensaje: ${messageText}` // hay luz
+                                `📍 Departamento: ${department.address}\n` +
+                                `💬 Mensaje: ${messageText}`
                         }
                     ]);
                 }
